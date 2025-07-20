@@ -27,6 +27,7 @@ namespace NaughtyCharacter
         public float Acceleration = 25.0f; // In meters/second
         public float Decceleration = 25.0f; // In meters/second
         public float MaxHorizontalSpeed = 8.0f; // In meters/second
+        public float SprintSpeed = 10.0f; // In meters/second
         public float JumpSpeed = 10.0f; // In meters/second
         public float JumpAbortSpeed = 10.0f; // In meters/second
     }
@@ -60,14 +61,18 @@ namespace NaughtyCharacter
 
         private float _targetHorizontalSpeed; // In meters/second
         private float _horizontalSpeed; // In meters/second
+        private float _SprintSpeed; // In meters/second
         private float _verticalSpeed; // In meters/second
         private bool _justWalkedOffALedge;
 
         private Vector2 _controlRotation; // X (Pitch), Y (Yaw)
         private Vector3 _movementInput;
         private Vector3 _lastMovementInput;
+        private Vector3 _sprintInput;
+        private Vector3 _lastSprintInput;
         private bool _hasMovementInput;
         private bool _jumpInput;
+        private bool _hasSprintInput;
 
         public Vector3 Velocity => _characterController.velocity;
         public Vector3 HorizontalVelocity => _characterController.velocity.SetY(0.0f);
@@ -131,6 +136,30 @@ namespace NaughtyCharacter
             }
 
             return movementInput;
+        }
+
+        public void SetSprintInput(Vector3 sprintInput)
+        {
+            bool hasSprintInput = sprintInput.sqrMagnitude > 0.0f;
+
+            if (hasSprintInput && !hasSprintInput)
+            {
+                _lastSprintInput = _sprintInput;
+            }
+           
+            _sprintInput = sprintInput;
+            _hasSprintInput = hasSprintInput;
+        }
+
+        private Vector3 GetSprintInput()
+        {
+            Vector3 sprintInput = _hasSprintInput ? _sprintInput : _lastSprintInput;
+            if (sprintInput.sqrMagnitude > 1f)
+            {
+                sprintInput.Normalize();
+            }
+
+            return sprintInput;
         }
 
         public void SetJumpInput(bool jumpInput)

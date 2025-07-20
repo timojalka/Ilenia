@@ -8,8 +8,11 @@ namespace NaughtyCharacter
         public Vector2 MoveInput { get; private set; }
         public Vector2 LastMoveInput { get; private set; }
         public Vector2 CameraInput { get; private set; }
+        public Vector2 SprintInput { get; private set; }
         public bool JumpInput { get; private set; }
         public bool HasMoveInput { get; private set; }
+        public bool HasSprintInput { get; private set; }
+        public bool WarpInput { get; private set; }
 
         public void OnMoveEvent(InputAction.CallbackContext context)
         {
@@ -40,6 +43,32 @@ namespace NaughtyCharacter
             {
                 JumpInput = false;
             }
+        }
+
+        public void OnSprintEvent(InputAction.CallbackContext context)
+        {
+            if (context.started || context.performed)
+            {
+                HasSprintInput = true;
+            }
+            else if (context.canceled)
+            {
+                HasSprintInput = false;
+            }
+
+        }
+
+        public void OnWarpEvent(InputAction.CallbackContext context)
+        {
+            if (context.started || context.performed)
+            {
+                WarpInput = true;
+            }
+            else if (context.canceled)
+            {
+                WarpInput = false;
+            }
+
         }
     }
 }

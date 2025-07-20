@@ -61,5 +61,21 @@ namespace NaughtyCharacter
 
             return movementInput;
         }
+
+        private Vector3 GetSprintInput()
+        {
+            // Calculate the move direction relative to the character's yaw rotation
+            Quaternion yawRotation = Quaternion.Euler(0.0f, Character.GetControlRotation().y, 0.0f);
+            Vector3 forward = yawRotation * Vector3.forward;
+            Vector3 right = yawRotation * Vector3.right;
+            Vector3 sprintInput = (forward * _playerInput.MoveInput.y + right * _playerInput.MoveInput.x);
+
+            if (sprintInput.sqrMagnitude > 1f)
+            {
+                sprintInput.Normalize();
+            }
+
+            return sprintInput;
+        }
     }
 }
